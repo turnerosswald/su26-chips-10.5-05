@@ -25,3 +25,60 @@ require 'rails_helper'
 
 # RSpec.describe Representative do
 # end
+RSpec.describe Representative, type: :model do
+  describe '.civic_api_to_representative_params' do
+    let(:geocodio_response) do
+      {
+        'results' => [
+          {
+            'response' => {
+              'results' => [
+                {
+                  'fields' => {
+                    'congressional_districts' => [
+                      {
+                        'name' => 'Congressional District 12',
+                        'district_number' => 12,
+                        'ocd_id' => 'ocd-division/country:us/state:ca/cd:12',
+                        'current_legislators' => [
+                          {
+                            'type' => 'representative',
+                            'bio' => {
+                              'first_name' => 'Jane',
+                              'last_name' => 'Doe',
+                              'party' => 'Democrat',
+                              'gender' => 'F'
+                            },
+                            'contact' => {
+                              'url' => 'https://doe.house.gov',
+                              'address' => '1234 Longworth House Office Building; Washington DC 20515',
+                              'phone' => '202-225-0000'
+                            },
+                            'social' => {
+                              'twitter' => 'repjanedoe'
+                            },
+                            'references' => {
+                              'bioguide_id' => 'D000000',
+                              'govtrack_id' => '412345'
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    end
+    
+    it 'does not create duplicate representatives' do
+      Representative.civic_api_to_representative_params(geocodio_response)
+      Representative.civic_api_to_representative_params(geocodio_response)
+
+      expect(Representative.count).to eq(1)
+    end
+  end
+end
