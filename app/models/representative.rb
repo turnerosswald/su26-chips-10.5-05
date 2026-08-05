@@ -48,12 +48,10 @@ class Representative < ApplicationRecord
 
   def self.find_rep(official, title: '', ocdid: '')
     rep = Representative.find_by(ocdid: ocdid)
-    if rep == nil
+    if rep.nil?
       rep = Representative.new({ name: official['name'], ocdid: ocdid,
-        title: title})
-      if rep.save
-        return rep
-      end
+        title: title })
+      return rep if rep.save
     end
     rep
   end

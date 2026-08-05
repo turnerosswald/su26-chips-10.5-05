@@ -25,7 +25,7 @@ require 'rails_helper'
 
 # RSpec.describe Representative do
 # end
-RSpec.describe Representative, type: :model do
+RSpec.describe Representative do
   describe '.civic_api_to_representative_params' do
     let(:geocodio_response) do
       {
@@ -73,12 +73,12 @@ RSpec.describe Representative, type: :model do
         ]
       }
     end
-    
-    it 'does not create duplicate representatives' do
-      Representative.civic_api_to_representative_params(geocodio_response)
-      Representative.civic_api_to_representative_params(geocodio_response)
 
-      expect(Representative.count).to eq(1)
+    it 'does not create duplicate representatives' do
+      described_class.civic_api_to_representative_params(geocodio_response)
+      described_class.civic_api_to_representative_params(geocodio_response)
+
+      expect(described_class.count).to eq(1)
     end
   end
 end
