@@ -14,3 +14,9 @@ Scenario: Searching by county shows representatives
   Then I should see "Rick Larsen"
   And I should see "Patty Murray"
   And I should see "Maria Cantwell"
+
+@javascript
+Scenario: Counties are clickable on the California map
+  Given I am on the homepage
+  When I click the state "CA"
+  Then "Sacramento County" should be a clickable county

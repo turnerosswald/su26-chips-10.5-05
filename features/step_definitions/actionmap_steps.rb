@@ -52,3 +52,12 @@ end
 When(/^I visit the representative search page for "(.*)"$/) do |county|
   visit search_representatives_path(address: county)
 end
+
+Then(/^"(.*)" should be a clickable county$/) do |county|
+  county_path = find(
+    "path[data-county-name='#{county}']",
+    visible: :all
+  )
+
+  expect(county_path['role']).to eq('link')
+end
