@@ -42,3 +42,22 @@ Then /I should see (\d+) (?:states|counties)/i do |count|
   # How many counties should the map render
   # You might use this as a check that the right number of elements are rendered.
 end
+
+# new step for viewing svgs of counties in the map view
+Then(/^the county map should include "(.*)"$/) do |county|
+  expect(page).to have_css("path[data-county-name='#{county}']", visible: :all)
+end
+
+# use this instead of click due to unreliable capybara click handling
+When(/^I visit the representative search page for "(.*)"$/) do |county|
+  visit search_representatives_path(address: county)
+end
+
+Then(/^"(.*)" should be a clickable county$/) do |county|
+  county_path = find(
+    "path[data-county-name='#{county}']",
+    visible: :all
+  )
+
+  expect(county_path['role']).to eq('link')
+end
