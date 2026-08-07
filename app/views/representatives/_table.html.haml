@@ -10,7 +10,6 @@
       - representatives.each do |rep|
         %tr
           %th{ scope: 'row' }
-            = rep.name
             -# BEGIN SOLUTION CS169
             = link_to(rep.name, representative_path(rep.id))
             -# END SOLUTION CS169

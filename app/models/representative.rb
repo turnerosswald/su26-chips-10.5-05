@@ -4,12 +4,22 @@
 #
 # Table name: representatives
 #
-#  id         :integer          not null, primary key
-#  name       :string
-#  ocdid      :string
-#  title      :string
-#  created_at :datetime         not null
-#  updated_at :datetime         not null
+#  id           :integer          not null, primary key
+#  address      :string
+#  contact_form :string
+#  facebook     :string
+#  name         :string
+#  ocdid        :string
+#  party        :string
+#  phone        :string
+#  photo_url    :string
+#  title        :string
+#  twitter      :string
+#  website      :string
+#  youtube      :string
+#  created_at   :datetime         not null
+#  updated_at   :datetime         not null
+#  bioguide_id  :string
 #
 class Representative < ApplicationRecord
   has_many :news_items, dependent: :delete_all
@@ -41,27 +51,32 @@ class Representative < ApplicationRecord
       # Rails.logger.debug official
       # official.dig('bio', 'party')
       ocdid = official.dig('references', 'govtrack_id')
-      reps << Representative.find_rep(official, ocdid: ocdid, title: title)
+      party = official.dig('bio', 'party')
+      reps << Representative.find_rep(official, ocdid: ocdid, title: title, party: party)
     end
     reps
   end
 
-  def self.find_rep(official, title: '', ocdid: '')
+  def self.find_rep(official, title: '', ocdid: '', party: '')
     rep = Representative.find_by(ocdid: ocdid)
     if rep.nil?
       rep = Representative.new({ name: official['name'], ocdid: ocdid,
-        title: title })
-      return rep if rep.save
+        title: title, party: party })
+      if rep.save
+        rep.update_from_geocodio(official)
+        return rep
+      end
+    else
+      rep.update_from_geocodio(official)
     end
     rep
   end
 
   def update_from_geocodio(official)
     self.title = official['type']
-    self.ocdid = official['govtrack_id']
-    self.party = official['party']
+    self.ocdid = official.dig('references', 'govtrack_id')
+    self.party = official.dig('bio', 'party')
     self.photo_url = official['photo_url']
-    # TODO: store the address, phone and website
     save!
     self
   end
