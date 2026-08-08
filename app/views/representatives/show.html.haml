@@ -13,13 +13,13 @@
           = image_tag @representative.portrait_url, portrait_options if @representative&.portrait_url.present?
           %h1.card-title= @representative&.name.presence || 'Unknown Representative'
           - if @representative&.title.present?
-            %h5.text-muted= @representative.title
+            %p.text-muted= @representative.title
           - if @representative&.party.present?
             %span.badge.bg-secondary.mb-3= @representative.party
 
       .card.shadow-sm.mt-4
         .card-header
-          %h5.mb-0 Personal Information
+          %h2.mb-0 Personal Information
         .card-body
           - if @representative&.birthday.present?
             %p
@@ -34,7 +34,7 @@
 
       .card.shadow-sm.mt-4
         .card-header
-          %h5.mb-0 Contact Information
+          %h2.mb-0 Contact Information
         .card-body
           - if @representative&.address.present?
             %p
@@ -66,7 +66,7 @@
 
       .card.shadow-sm.mt-4
         .card-header
-          %h5.mb-0 Social Media
+          %h2.mb-0 Social Media
         .card-body
           - if @representative&.twitter.present?
             - twitter_url = "https://twitter.com/#{@representative.twitter}"
