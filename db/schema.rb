@@ -58,6 +58,8 @@ ActiveRecord::Schema[7.2].define(version: 2026_08_07_212727) do
     t.string "youtube"
     t.string "bioguide_id"
     t.string "photo_url"
+    t.date "birthday"
+    t.string "gender"
   end
 
   create_table "states", force: :cascade do |t|

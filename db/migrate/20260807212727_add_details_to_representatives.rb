@@ -12,5 +12,7 @@ class AddDetailsToRepresentatives < ActiveRecord::Migration[7.2]
     add_column :representatives, :youtube, :string
     add_column :representatives, :bioguide_id, :string
     add_column :representatives, :photo_url, :string
+    add_column :representatives, :birthday, :date
+    add_column :representatives, :gender, :string
   end
 end

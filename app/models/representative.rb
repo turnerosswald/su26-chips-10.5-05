@@ -6,8 +6,10 @@
 #
 #  id           :integer          not null, primary key
 #  address      :string
+#  birthday     :date
 #  contact_form :string
 #  facebook     :string
+#  gender       :string
 #  name         :string
 #  ocdid        :string
 #  party        :string
@@ -52,16 +54,31 @@ class Representative < ApplicationRecord
       # official.dig('bio', 'party')
       ocdid = official.dig('references', 'govtrack_id')
       party = official.dig('bio', 'party')
-      reps << Representative.find_rep(official, ocdid: ocdid, title: title, party: party)
+      birthday = official.dig('bio', 'birthday')
+      gender = official.dig('bio', 'gender')
+      office_address = official.dig('contact', 'address')
+      phone = official.dig('contact', 'phone')
+      contact_form_url = official.dig('contact', 'contact_form')
+      official_website = official.dig('contact', 'url')
+      twitter = official.dig('social', 'twitter')
+      facebook = official.dig('social', 'facebook')
+      youtube_handles = official.dig('social', 'youtube')
+      bioguide_id = official.dig('references', 'bioguide_id')
+
+      reps << Representative.find_rep(official, ocdid: ocdid, title: title, party: party, birthday: birthday, gender: gender, address: office_address, phone: phone, contact_form: contact_form_url, website: official_website, twitter: twitter, facebook: facebook, youtube: youtube_handles, bioguide_id: bioguide_id)
     end
     reps
   end
 
-  def self.find_rep(official, title: '', ocdid: '', party: '')
+  def self.find_rep(official, title: '', ocdid: '', party: '', birthday: '', gender: '', address: '', phone: '', contact_form: '', website: '', twitter: '', 
+    facebook: '', youtube: '', bioguide_id: '')
     rep = Representative.find_by(ocdid: ocdid)
     if rep.nil?
       rep = Representative.new({ name: official['name'], ocdid: ocdid,
-        title: title, party: party })
+        title: title, party: party, birthday: birthday, 
+        gender: gender, address: address, phone: phone, website: website,
+        contact_form: contact_form, twitter: twitter, facebook: facebook, 
+        youtube: youtube, bioguide_id: bioguide_id })
       if rep.save
         rep.update_from_geocodio(official)
         return rep
@@ -72,11 +89,27 @@ class Representative < ApplicationRecord
     rep
   end
 
+  def portrait_url
+    return nil if bioguide_id.blank?
+
+    "https://www.congress.gov/img/member/#{bioguide_id.downcase}_200.jpg"
+  end
+
   def update_from_geocodio(official)
     self.title = official['type']
     self.ocdid = official.dig('references', 'govtrack_id')
     self.party = official.dig('bio', 'party')
-    self.photo_url = official['photo_url']
+    self.birthday = official.dig('bio', 'birthday')
+    self.gender = official.dig('bio', 'gender')
+    self.address = official.dig('contact', 'address')
+    self.phone = official.dig('contact', 'phone')
+    self.website = official.dig('contact', 'url')
+    self.contact_form = official.dig('contact', 'contact_form')
+    self.twitter = official.dig('social', 'twitter')
+    self.facebook = official.dig('social', 'facebook')
+    self.youtube = official.dig('social', 'youtube')
+    self.bioguide_id = official.dig('references', 'bioguide_id')
+
     save!
     self
   end

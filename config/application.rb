@@ -44,5 +44,6 @@ module Actionmap
     config.hosts << '.codio.io'
     config.hosts << '.herokuapp.com'
     config.hosts << '127.0.0.1'
+    
   end
 end

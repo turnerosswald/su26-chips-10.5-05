@@ -1,5 +1,76 @@
-.container-fluid.bg-light
-  .row.text-center
-    .col-12
-      %h1.text-center= @representative&.name
-      %h1.text-center= @representative&.party
+.container.py-5
+  .row.justify-content-center
+    .col-md-8
+      .card.shadow-sm
+        .card-body.text-center
+          - if @representative&.portrait_url.present?
+            = image_tag @representative.portrait_url, class: 'rounded-circle mb-3', style: 'width: 150px; height: 150px; object-fit: cover;', alt: @representative&.name, onerror: "this.style.display='none'"
+
+          %h1.card-title= @representative&.name.presence || 'Unknown Representative'
+
+          - if @representative&.title.present?
+            %h5.text-muted= @representative.title
+
+          - if @representative&.party.present?
+            %span.badge.bg-secondary.mb-3= @representative.party
+
+      .card.shadow-sm.mt-4
+        .card-header
+          %h5.mb-0 Personal Information
+        .card-body
+          - if @representative&.birthday.present?
+            %p
+              %strong Birthday:
+              = @representative.birthday.strftime('%B %-d, %Y')
+          - if @representative&.gender.present?
+            %p
+              %strong Gender:
+              = @representative.gender
+          - if @representative&.birthday.blank? && @representative&.gender.blank?
+            %p.text-muted No personal information available.
+
+      .card.shadow-sm.mt-4
+        .card-header
+          %h5.mb-0 Contact Information
+        .card-body
+          - if @representative&.address.present?
+            %p
+              %strong Office Address:
+              = @representative.address
+          - if @representative&.phone.present?
+            %p
+              %strong Phone:
+              = @representative.phone
+          - if @representative&.website.present?
+            %p
+              %strong Website:
+              = link_to @representative.website, @representative.website, target: '_blank', rel: 'noopener'
+          - if @representative&.contact_form.present?
+            %p
+              %strong Contact Form:
+              = link_to @representative.contact_form, @representative.contact_form, target: '_blank', rel: 'noopener'
+          - if [@representative&.address, @representative&.phone, @representative&.website, @representative&.contact_form].all?(&:blank?)
+            %p.text-muted No contact information available.
+
+      .card.shadow-sm.mt-4
+        .card-header
+          %h5.mb-0 Social Media
+        .card-body
+          - if @representative&.twitter.present?
+            %p
+              %strong Twitter:
+              = link_to "@#{@representative.twitter}", "https://twitter.com/#{@representative.twitter}", target: '_blank', rel: 'noopener'
+          - if @representative&.facebook.present?
+            %p
+              %strong Facebook:
+              = link_to @representative.facebook, "https://facebook.com/#{@representative.facebook}", target: '_blank', rel: 'noopener'
+          - if @representative&.youtube.present?
+            %p
+              %strong YouTube:
+              = link_to @representative.youtube, "https://youtube.com/#{@representative.youtube}", target: '_blank', rel: 'noopener'
+          - if [@representative&.twitter, @representative&.facebook, @representative&.youtube].all?(&:blank?)
+            %p.text-muted No social media accounts available.
+
+      - if @representative&.bioguide_id.present?
+        .text-muted.mt-3.small
+          Bioguide ID: #{@representative.bioguide_id}

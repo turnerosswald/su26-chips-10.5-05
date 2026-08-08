@@ -6,8 +6,10 @@
 #
 #  id           :integer          not null, primary key
 #  address      :string
+#  birthday     :date
 #  contact_form :string
 #  facebook     :string
+#  gender       :string
 #  name         :string
 #  ocdid        :string
 #  party        :string
