@@ -49,36 +49,23 @@ class Representative < ApplicationRecord
     @legislators.each_with_index do |official, _index|
       official['name'] = "#{official.dig('bio', 'first_name')} #{official.dig('bio', 'last_name')}"
       title = official['type']
-      # Inspect all the data that's there to make part 1 easier.
-      # Rails.logger.debug official
-      # official.dig('bio', 'party')
       ocdid = official.dig('references', 'govtrack_id')
-      party = official.dig('bio', 'party')
-      birthday = official.dig('bio', 'birthday')
-      gender = official.dig('bio', 'gender')
-      office_address = official.dig('contact', 'address')
-      phone = official.dig('contact', 'phone')
-      contact_form_url = official.dig('contact', 'contact_form')
-      official_website = official.dig('contact', 'url')
-      twitter = official.dig('social', 'twitter')
-      facebook = official.dig('social', 'facebook')
-      youtube_handles = official.dig('social', 'youtube')
-      bioguide_id = official.dig('references', 'bioguide_id')
 
-      reps << Representative.find_rep(official, ocdid: ocdid, title: title, party: party, birthday: birthday, gender: gender, address: office_address, phone: phone, contact_form: contact_form_url, website: official_website, twitter: twitter, facebook: facebook, youtube: youtube_handles, bioguide_id: bioguide_id)
+      reps << Representative.find_rep(official, ocdid: ocdid, title: title)
     end
     reps
   end
 
-  def self.find_rep(official, title: '', ocdid: '', party: '', birthday: '', gender: '', address: '', phone: '', contact_form: '', website: '', twitter: '', 
-    facebook: '', youtube: '', bioguide_id: '')
+  def self.find_rep(official, title: '', ocdid: '')
     rep = Representative.find_by(ocdid: ocdid)
+
     if rep.nil?
-      rep = Representative.new({ name: official['name'], ocdid: ocdid,
-        title: title, party: party, birthday: birthday, 
-        gender: gender, address: address, phone: phone, website: website,
-        contact_form: contact_form, twitter: twitter, facebook: facebook, 
-        youtube: youtube, bioguide_id: bioguide_id })
+      rep = Representative.new({
+                                 name: official['name'],
+        ocdid: ocdid,
+        title: title
+                               })
+
       if rep.save
         rep.update_from_geocodio(official)
         return rep
@@ -86,6 +73,7 @@ class Representative < ApplicationRecord
     else
       rep.update_from_geocodio(official)
     end
+
     rep
   end
 
