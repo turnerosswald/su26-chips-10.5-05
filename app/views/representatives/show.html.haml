@@ -1,5 +1,97 @@
-.container-fluid.bg-light
-  .row.text-center
-    .col-12
-      %h1.text-center= @representative&.name
-      %h1.text-center= @representative&.party
+.container.py-5
+  .row.justify-content-center
+    .col-md-8
+      .card.shadow-sm
+        .card-body.text-center
+          :ruby
+            portrait_options = {
+              class: 'rounded-circle mb-3',
+              style: 'width: 150px; height: 150px; object-fit: cover;',
+              alt: @representative&.name,
+              onerror: "this.style.display='none'"
+            }
+          = image_tag @representative.portrait_url, portrait_options if @representative&.portrait_url.present?
+          %h1.card-title= @representative&.name.presence || 'Unknown Representative'
+          - if @representative&.title.present?
+            %h5.text-muted= @representative.title
+          - if @representative&.party.present?
+            %span.badge.bg-secondary.mb-3= @representative.party
+
+      .card.shadow-sm.mt-4
+        .card-header
+          %h5.mb-0 Personal Information
+        .card-body
+          - if @representative&.birthday.present?
+            %p
+              %strong Birthday:
+              = @representative.birthday.strftime('%B %-d, %Y')
+          - if @representative&.gender.present?
+            %p
+              %strong Gender:
+              = @representative.gender
+          - if @representative&.birthday.blank? && @representative&.gender.blank?
+            %p.text-muted No personal information available.
+
+      .card.shadow-sm.mt-4
+        .card-header
+          %h5.mb-0 Contact Information
+        .card-body
+          - if @representative&.address.present?
+            %p
+              %strong Office Address:
+              = @representative.address
+          - if @representative&.phone.present?
+            %p
+              %strong Phone:
+              = @representative.phone
+          - if @representative&.website.present?
+            - website = @representative.website
+            %p
+              %strong Website:
+              = link_to website, website, target: '_blank', rel: 'noopener'
+          - if @representative&.contact_form.present?
+            - contact_form = @representative.contact_form
+            %p
+              %strong Contact Form:
+              = link_to contact_form, contact_form, target: '_blank', rel: 'noopener'
+          :ruby
+            contact_info = [
+              @representative&.address,
+              @representative&.phone,
+              @representative&.website,
+              @representative&.contact_form
+            ]
+          - if contact_info.all?(&:blank?)
+            %p.text-muted No contact information available.
+
+      .card.shadow-sm.mt-4
+        .card-header
+          %h5.mb-0 Social Media
+        .card-body
+          - if @representative&.twitter.present?
+            - twitter_url = "https://twitter.com/#{@representative.twitter}"
+            %p
+              %strong Twitter:
+              = link_to "@#{@representative.twitter}", twitter_url, target: '_blank', rel: 'noopener'
+          - if @representative&.facebook.present?
+            - facebook_url = "https://facebook.com/#{@representative.facebook}"
+            %p
+              %strong Facebook:
+              = link_to @representative.facebook, facebook_url, target: '_blank', rel: 'noopener'
+          - if @representative&.youtube.present?
+            - youtube_url = "https://youtube.com/#{@representative.youtube}"
+            %p
+              %strong YouTube:
+              = link_to @representative.youtube, youtube_url, target: '_blank', rel: 'noopener'
+          :ruby
+            social_info = [
+              @representative&.twitter,
+              @representative&.facebook,
+              @representative&.youtube
+            ]
+          - if social_info.all?(&:blank?)
+            %p.text-muted No social media accounts available.
+
+      - if @representative&.bioguide_id.present?
+        .text-muted.mt-3.small
+          Bioguide ID: #{@representative.bioguide_id}

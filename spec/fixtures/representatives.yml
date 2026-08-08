@@ -4,8 +4,10 @@
 #
 #  id           :integer          not null, primary key
 #  address      :string
+#  birthday     :date
 #  contact_form :string
 #  facebook     :string
+#  gender       :string
 #  name         :string
 #  ocdid        :string
 #  party        :string
@@ -24,3 +26,20 @@ john_doe:
     name: John Doe
     title: Senator
     ocdid: 12345
+  
+jane_smith:
+  id: 2
+  name: Jane Smith
+  title: Representative
+  ocdid: 67890
+  party: Democrat
+  address: 123 Capitol St, Washington DC
+  phone: 202-555-0100
+  website: https://janesmith.house.gov
+  contact_form: https://janesmith.house.gov/contact
+  twitter: RepJaneSmith
+  facebook: RepJaneSmith
+  youtube: RepJaneSmith
+  bioguide_id: S000999
+  birthday: 1970-01-01
+  gender: F

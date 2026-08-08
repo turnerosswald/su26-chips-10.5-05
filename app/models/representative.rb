@@ -6,8 +6,10 @@
 #
 #  id           :integer          not null, primary key
 #  address      :string
+#  birthday     :date
 #  contact_form :string
 #  facebook     :string
+#  gender       :string
 #  name         :string
 #  ocdid        :string
 #  party        :string
@@ -47,21 +49,23 @@ class Representative < ApplicationRecord
     @legislators.each_with_index do |official, _index|
       official['name'] = "#{official.dig('bio', 'first_name')} #{official.dig('bio', 'last_name')}"
       title = official['type']
-      # Inspect all the data that's there to make part 1 easier.
-      # Rails.logger.debug official
-      # official.dig('bio', 'party')
       ocdid = official.dig('references', 'govtrack_id')
-      party = official.dig('bio', 'party')
-      reps << Representative.find_rep(official, ocdid: ocdid, title: title, party: party)
+
+      reps << Representative.find_rep(official, ocdid: ocdid, title: title)
     end
     reps
   end
 
-  def self.find_rep(official, title: '', ocdid: '', party: '')
+  def self.find_rep(official, title: '', ocdid: '')
     rep = Representative.find_by(ocdid: ocdid)
+
     if rep.nil?
-      rep = Representative.new({ name: official['name'], ocdid: ocdid,
-        title: title, party: party })
+      rep = Representative.new({
+                                 name: official['name'],
+        ocdid: ocdid,
+        title: title
+                               })
+
       if rep.save
         rep.update_from_geocodio(official)
         return rep
@@ -69,14 +73,31 @@ class Representative < ApplicationRecord
     else
       rep.update_from_geocodio(official)
     end
+
     rep
+  end
+
+  def portrait_url
+    return nil if bioguide_id.blank?
+
+    "https://www.congress.gov/img/member/#{bioguide_id.downcase}_200.jpg"
   end
 
   def update_from_geocodio(official)
     self.title = official['type']
     self.ocdid = official.dig('references', 'govtrack_id')
     self.party = official.dig('bio', 'party')
-    self.photo_url = official['photo_url']
+    self.birthday = official.dig('bio', 'birthday')
+    self.gender = official.dig('bio', 'gender')
+    self.address = official.dig('contact', 'address')
+    self.phone = official.dig('contact', 'phone')
+    self.website = official.dig('contact', 'url')
+    self.contact_form = official.dig('contact', 'contact_form')
+    self.twitter = official.dig('social', 'twitter')
+    self.facebook = official.dig('social', 'facebook')
+    self.youtube = official.dig('social', 'youtube')
+    self.bioguide_id = official.dig('references', 'bioguide_id')
+
     save!
     self
   end
