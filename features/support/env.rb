@@ -13,6 +13,7 @@ SimpleCov::Formatter::LcovFormatter.config do |c|
 end
 
 SimpleCov.start 'rails' do
+  add_filter 'lib'
   # This is so we can sum the coverage across the two cucumber CI steps.
   profile = ENV['CUCUMBER_PROFILE'] || ENV['PROFILE'] ||
             begin
@@ -27,7 +28,6 @@ SimpleCov.start 'rails' do
   # enable_coverage :branch
 
   ## CS169: You may want to modify some of the testing configuration.
-
   # This only shows the more verbose console output on GitHub
   # You may choose to enable it locally.
   formatters = [
