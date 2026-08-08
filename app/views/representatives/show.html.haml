@@ -3,14 +3,17 @@
     .col-md-8
       .card.shadow-sm
         .card-body.text-center
-          - if @representative&.portrait_url.present?
-            = image_tag @representative.portrait_url, class: 'rounded-circle mb-3', style: 'width: 150px; height: 150px; object-fit: cover;', alt: @representative&.name, onerror: "this.style.display='none'"
-
+          :ruby
+            portrait_options = {
+              class: 'rounded-circle mb-3',
+              style: 'width: 150px; height: 150px; object-fit: cover;',
+              alt: @representative&.name,
+              onerror: "this.style.display='none'"
+            }
+          = image_tag @representative.portrait_url, portrait_options if @representative&.portrait_url.present?
           %h1.card-title= @representative&.name.presence || 'Unknown Representative'
-
           - if @representative&.title.present?
             %h5.text-muted= @representative.title
-
           - if @representative&.party.present?
             %span.badge.bg-secondary.mb-3= @representative.party
 
@@ -42,14 +45,23 @@
               %strong Phone:
               = @representative.phone
           - if @representative&.website.present?
+            - website = @representative.website
             %p
               %strong Website:
-              = link_to @representative.website, @representative.website, target: '_blank', rel: 'noopener'
+              = link_to website, website, target: '_blank', rel: 'noopener'
           - if @representative&.contact_form.present?
+            - contact_form = @representative.contact_form
             %p
               %strong Contact Form:
-              = link_to @representative.contact_form, @representative.contact_form, target: '_blank', rel: 'noopener'
-          - if [@representative&.address, @representative&.phone, @representative&.website, @representative&.contact_form].all?(&:blank?)
+              = link_to contact_form, contact_form, target: '_blank', rel: 'noopener'
+          :ruby
+            contact_info = [
+              @representative&.address,
+              @representative&.phone,
+              @representative&.website,
+              @representative&.contact_form
+            ]
+          - if contact_info.all?(&:blank?)
             %p.text-muted No contact information available.
 
       .card.shadow-sm.mt-4
@@ -57,18 +69,27 @@
           %h5.mb-0 Social Media
         .card-body
           - if @representative&.twitter.present?
+            - twitter_url = "https://twitter.com/#{@representative.twitter}"
             %p
               %strong Twitter:
-              = link_to "@#{@representative.twitter}", "https://twitter.com/#{@representative.twitter}", target: '_blank', rel: 'noopener'
+              = link_to "@#{@representative.twitter}", twitter_url, target: '_blank', rel: 'noopener'
           - if @representative&.facebook.present?
+            - facebook_url = "https://facebook.com/#{@representative.facebook}"
             %p
               %strong Facebook:
-              = link_to @representative.facebook, "https://facebook.com/#{@representative.facebook}", target: '_blank', rel: 'noopener'
+              = link_to @representative.facebook, facebook_url, target: '_blank', rel: 'noopener'
           - if @representative&.youtube.present?
+            - youtube_url = "https://youtube.com/#{@representative.youtube}"
             %p
               %strong YouTube:
-              = link_to @representative.youtube, "https://youtube.com/#{@representative.youtube}", target: '_blank', rel: 'noopener'
-          - if [@representative&.twitter, @representative&.facebook, @representative&.youtube].all?(&:blank?)
+              = link_to @representative.youtube, youtube_url, target: '_blank', rel: 'noopener'
+          :ruby
+            social_info = [
+              @representative&.twitter,
+              @representative&.facebook,
+              @representative&.youtube
+            ]
+          - if social_info.all?(&:blank?)
             %p.text-muted No social media accounts available.
 
       - if @representative&.bioguide_id.present?
