@@ -96,4 +96,13 @@ std_fips_code: '001' }
       expect(response).to redirect_to root_path
     end
   end
+  describe 'county not found' do
+    it 'redirects to root when the county does not exist' do
+      get :county, params: {
+        state_symbol: 'CA',
+        std_fips_code: '99999'}
+      expect(response).to redirect_to(root_path)
+      expect(flash[:alert]).to be_present
+    end
+  end
 end
