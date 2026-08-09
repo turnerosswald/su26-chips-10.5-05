@@ -5,7 +5,25 @@ Given('Representative {string} exists') do |name|
     name: name,
     ocdid: '412345',
     title: 'Representative',
-    party: 'Democrat'
+    party: 'Democrat',
+    gender: 'F',
+    birthday: Date.new(1970, 1, 1),
+    address: '123 Capitol St, Washington DC 20515',
+    phone: '202-555-0100',
+    website: 'https://example.house.gov',
+    contact_form: 'https://example.house.gov/contact',
+    twitter: 'RepExample',
+    facebook: 'RepExample',
+    youtube: 'RepExample',
+    bioguide_id: 'E000123'
+  )
+end
+
+Given('Representative {string} exists with only a name') do |name|
+  @representative = Representative.create!(
+    name: name,
+    ocdid: '999999',
+    title: 'Representative'
   )
 end
 
@@ -13,22 +31,25 @@ When("I visit the representative's profile") do
   visit representative_path(@representative)
 end
 
-Then('I should see their name') do
-  expect(page).to have_content(@representative.name)
+Then('I should see their {word}') do |attribute|
+  value = @representative.public_send(attribute)
+  expect(page).to have_content(value)
 end
 
-Given('Representative {string} exists with missing profile information') do |name|
-  @representative = Representative.create!(
-    name: name,
-    ocdid: '999999',
-    title: 'Representative',
-    party: nil,
-    photo_url: nil,
-    phone: nil,
-    twitter: nil
-  )
+Then('I should see their birthday formatted') do
+  expect(page).to have_content(@representative.birthday.strftime('%B %-d, %Y'))
 end
-Then('the representative profile should load successfully') do
-  expect(page).to have_content(@representative.name)
-  expect(page).to have_current_path(representative_path(@representative))
+
+When('I visit the representatives page') do
+  visit representatives_path
+end
+
+When("I visit Jane Doe's news items page") do
+  visit representative_news_items_path(@representative)
+end
+Then('{string} should link to the representative profile') do |name|
+  expect(page).to have_link(
+    name,
+    href: representative_path(@representative)
+  )
 end
