@@ -71,3 +71,8 @@ Feature: Representatives profile
       And I should see "No contact information available."
       And I should see "No social media accounts available."
 
+    Scenario: Representative name on news items links to profile
+      Given Representative "Jane Doe" exists
+      When I visit Jane Doe's news items page
+      Then "Jane Doe" should link to the representative profile
+

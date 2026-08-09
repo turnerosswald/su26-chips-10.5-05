@@ -39,3 +39,14 @@ end
 Then('I should see their birthday formatted') do
   expect(page).to have_content(@representative.birthday.strftime('%B %-d, %Y'))
 end
+
+When("I visit Jane Doe's news items page") do
+  visit representative_news_items_path(@representative)
+end
+
+Then('{string} should link to the representative profile') do |name|
+  expect(page).to have_link(
+    name,
+    href: representative_path(@representative)
+  )
+end
