@@ -86,5 +86,23 @@ RSpec.describe Representative do
 
       expect(described_class.count).to eq(1)
     end
+
+    it 'updates a representative' do
+      rep = described_class.create!(name: 'Jane Doe', ocdid: '412345', title: 'representative')
+
+      described_class.civic_api_to_representative_params(geocodio_response)
+
+      expect(rep.reload.party).to eq('Democrat')
+      expect(rep.phone).to eq('202-225-0000')
+    end
+
+    it 'stores the contact info' do
+      reps = described_class.civic_api_to_representative_params(geocodio_response)
+      rep = reps.first
+
+      expect(rep.address).to eq('1234 Longworth House Office Building; Washington DC 20515')
+      expect(rep.phone).to eq('202-225-0000')
+      expect(rep.website).to eq('https://doe.house.gov')
+    end
   end
 end
