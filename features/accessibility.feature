@@ -29,14 +29,17 @@ Scenario: The Representatives Page
 ## CHIPS 10.5 -- add iteration 1/2 additional pages here.
 ## You may want to set up conditions like searching for data, etc.
 
-## CS169: Add the first page here.
-# Be sure to tag the Scenario with @a11y
-# @a11y
-# Scenario: ...
+@a11y
+Scenario: Checking a representative's profile
+    Given Representative "Jane Doe" exists
+    When I visit the representative's profile
+    Then the page should be axe clean
 
-## CS169: Add the second page here.
-# @a11y
-# Scenario: ...
+@a11y
+Scenario: Checking county representative results
+    When I visit the representative search page for "Skagit County, WA"
+    Then I should see "Rick Larsen"
+    And the page should be axe clean
 
 ## CS169: Add the third page here.
 # @a11y
