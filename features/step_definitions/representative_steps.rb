@@ -16,3 +16,19 @@ end
 Then('I should see their name') do
   expect(page).to have_content(@representative.name)
 end
+
+Given('Representative {string} exists with missing profile information') do |name|
+  @representative = Representative.create!(
+    name: name,
+    ocdid: '999999',
+    title: 'Representative',
+    party: nil,
+    photo_url: nil,
+    phone: nil,
+    twitter: nil
+  )
+end
+Then('the representative profile should load successfully') do
+  expect(page).to have_content(@representative.name)
+  expect(page).to have_current_path(representative_path(@representative))
+end

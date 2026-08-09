@@ -9,3 +9,7 @@ Feature: Representatives profile
         Given Representative "Jane Doe" exists
         When I visit the representative's profile
         Then I should see their name
+    Scenario: Viewing a representative with missing optional information
+        Given Representative "John Smith" exists with missing profile information
+        When I visit the representative's profile
+        Then the representative profile should load successfully
