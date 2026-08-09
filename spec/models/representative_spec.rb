@@ -88,14 +88,11 @@ RSpec.describe Representative do
     end
 
     it 'updates a representative' do
-      rep = described_class.create!(
-        name: 'Jane Doe',
-        ocdid: '412345',
-        title: 'representative'
-      )
+      rep = described_class.create!(name: 'Jane Doe', ocdid: '412345', title: 'representative')
+
       described_class.civic_api_to_representative_params(geocodio_response)
-      rep.reload
-      expect(rep.party).to eq('Democrat')
+
+      expect(rep.reload.party).to eq('Democrat')
       expect(rep.phone).to eq('202-225-0000')
     end
 
