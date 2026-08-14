@@ -14,7 +14,7 @@ end
 
 SimpleCov.start 'rails' do
   add_filter 'lib'
-  
+
   # This is so we can sum the coverage across the two cucumber CI steps.
   profile = ENV['CUCUMBER_PROFILE'] || ENV['PROFILE'] ||
             begin
