@@ -1,0 +1,34 @@
+%h1 Bills
+
+= form_tag bills_path, method: :get do
+  = number_field_tag :congress, params[:congress], placeholder: 'Congress'
+  = select_tag :bill_type, options_for_select(@bill_types, params[:bill_type]), include_blank: 'Any type'
+  = submit_tag 'Search'
+
+- if @bills.present?
+  %p Showing #{@bills.length} of #{@total} results
+
+  %table
+    %tr
+      %th #
+      %th Title
+      %th Congress
+      %th Type
+      %th Chamber
+      %th Last Action
+      %th
+    - @bills.each do |bill|
+      %tr
+        %td #{bill['type']} #{bill['number']}
+        %td= bill['title']
+        %td= bill['congress']
+        %td= bill['type']
+        %td= bill['originChamber']
+        %td
+          = bill.dig('latestAction', 'text')
+          on
+          = Date.parse(bill.dig('latestAction', 'actionDate')).strftime('%b %-d, %Y')
+        %td
+          = button_to 'Save', bills_path(save_bill_params(bill)), method: :post
+- elsif params[:congress] || params[:bill_type]
+  %p No results found.

@@ -1,0 +1,7 @@
+%h1 #{@bill.type} #{@bill.number}
+%p= @bill.title
+%p Congress #{@bill.congress}
+%p= @bill.original_chamber
+= sanitize @bill.summary
+
+= link_to 'Back to Bills', bills_path
