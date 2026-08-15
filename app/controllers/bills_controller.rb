@@ -50,9 +50,11 @@ class BillsController < ApplicationController
 
   def get_bills(client)
     if @congress.blank? && @bill_type.blank?
-      client.bills(congress: 119, limit: 50).get
+      client.bills(limit: 50).get
+    elsif @bill_type.present?
+      client.bills(congress: @congress, type: @bill_type).get
     else
-      client.bills(congress: @congress || 119, type: @bill_type.presence || 'all').get
+      client.bills(congress: @congress).get
     end
   end
 end
