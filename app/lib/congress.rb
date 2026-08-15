@@ -84,13 +84,13 @@ module Congress
     end
 
     def bills(congress: nil, type: 'all', offset: 0, limit: 20)
-      if congress.nil?
-        path = 'bill'
-      elsif type == 'all'
-        "bill/#{congress}"
-      else
-        "bill/#{congress}/#{type}"
-      end
+      path = if congress.nil?
+               'bill'
+             elsif type == 'all'
+               "bill/#{congress}"
+             else
+               "bill/#{congress}/#{type}"
+             end
       Response.new(self, path, offset: offset, limit: limit)
     end
 
