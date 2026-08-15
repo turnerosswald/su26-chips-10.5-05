@@ -61,5 +61,28 @@ RSpec.describe BillsController do
       get :index
       expect(assigns(:total)).to eq(1)
     end
+
+    context 'when bill type is provided without a congress' do
+      it 'sets an alert and does not search' do
+        get :index, params: { bill_type: 'hr' }
+        expect(flash.now[:alert]).to eq('Select a Congress session to search by bill type.')
+        expect(assigns(:bills)).to eq([])
+        expect(assigns(:total)).to eq(0)
+      end
+    end
+  end
+
+  describe 'POST create' do
+    before do
+      allow(client).to receive(:get).and_return({ 'summaries' => [{ 'text' => 'Some summary' }] })
+    end
+
+    it 'redirects with an alert when the bill cannot be saved' do
+      allow(Bill).to receive(:save_from_api).and_return(nil)
+      post :create,
+           params: { title: 'Test', congress: '119', number: '134', original_chamber: 'House', bill_type: 'hr' }
+      expect(response).to redirect_to(bills_path)
+      expect(flash[:alert]).to eq('Could not save that bill.')
+    end
   end
 end
