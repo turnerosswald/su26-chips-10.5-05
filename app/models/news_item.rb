@@ -21,26 +21,27 @@ class NewsItem < ApplicationRecord
   # TODO: this belongs to a user (creator_id)
   belongs_to :representative
   def self.issues
-  [
-    'Free Speech',
-    'Immigration',
-    'Terrorism',
-    'Social Security and Medicare',
-    'Abortion',
-    'Student Loans',
-    'Gun Control',
-    'Unemployment',
-    'Climate Change',
-    'Homelessness',
-    'Racism',
-    'Tax Reform',
-    'Net Neutrality',
-    'Religious Freedom',
-    'Border Security',
-    'Minimum Wage',
-    'Equal Pay'
-  ]
-end #issues added
+    [
+      'Free Speech',
+      'Immigration',
+      'Terrorism',
+      'Social Security and Medicare',
+      'Abortion',
+      'Student Loans',
+      'Gun Control',
+      'Unemployment',
+      'Climate Change',
+      'Homelessness',
+      'Racism',
+      'Tax Reform',
+      'Net Neutrality',
+      'Religious Freedom',
+      'Border Security',
+      'Minimum Wage',
+      'Equal Pay'
+    ]
+  end
+
   def self.find_for(representative_id)
     NewsItem.find_by(
       representative_id: representative_id

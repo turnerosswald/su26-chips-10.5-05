@@ -1,10 +1,6 @@
 # CHIP 10.5: ActionMap
 
-## You should edit this readme!
 
-> By the end of iteration 1, you should edit this file (and remove this message) to make sure you've updated the badge and links to Heroku, etc.
-
-<!-- TODO: Update these for your repo! -->
 
 [![All Specs](https://github.com/saasbook/hw-agile-iterations/actions/workflows/specs.yml/badge.svg)](https://github.com/saasbook/hw-agile-iterations/actions/workflows/specs.yml)
 
@@ -12,11 +8,10 @@
 
 ## Basic Info
 
-<!-- Fill in at least the following info, but add more as is useful. -->
+Team Name / Number: CHIPS 10.5, Group 05
+Deployment: https://actionmap-05.onrender.com
+Team Members: Dominic Lopez, Khoa Nguyen, Leeahnie Anderson, Turner Osswald
 
-Team Name / Number:
-Heroku Deployment:
-Team Members:
 
 ---
 
