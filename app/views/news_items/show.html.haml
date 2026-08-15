@@ -26,8 +26,7 @@
               = form_with model: Rating.new,
                           url: representative_news_item_rating_path(@representative, @news_item),
                           local: true do |f|
-                = f.select :score, options_for_select(1..5), {},
-                          class: 'form-control mb-2'
+                = f.select(:score, options_for_select(1..5), {}, class: 'form-control mb-2')
                 = f.submit 'Submit Rating', class: 'btn btn-primary'
 
         %dl.row
