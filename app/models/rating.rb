@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # == Schema Information
 #
 # Table name: ratings
@@ -22,11 +24,13 @@
 class Rating < ApplicationRecord
   belongs_to :user
   belongs_to :news_item
-  validates :score, presence: true, inclusion: {in: 1..5}
+  validates :score, presence: true, inclusion: { in: 1..5 }
   validates :user_id, uniqueness: { scope: :news_item_id }
-  after_save :update_average_rating
   after_destroy :update_average_rating
+  after_save :update_average_rating
+
   private
+
   def update_average_rating
     average = news_item.ratings.average(:score) || 0
     news_item.update_column(:average_rating, average)

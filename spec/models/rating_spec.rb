@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # == Schema Information
 #
 # Table name: ratings
@@ -21,7 +23,7 @@
 #
 require 'rails_helper'
 
-RSpec.describe Rating, type: :model do
+RSpec.describe Rating do
   let(:representative) do
     Representative.create!(
       name: 'Jane Doe',
@@ -51,6 +53,7 @@ RSpec.describe Rating, type: :model do
       email: 'rating2@example.com'
     )
   end
+
   it 'accepts a rating between 1 and 5' do
     rating = described_class.new(
       user: user,
@@ -59,6 +62,7 @@ RSpec.describe Rating, type: :model do
     )
     expect(rating).to be_valid
   end
+
   it 'rejects a rating greater than 5' do
     rating = described_class.new(
       user: user,
@@ -67,6 +71,7 @@ RSpec.describe Rating, type: :model do
     )
     expect(rating).not_to be_valid
   end
+
   it 'rejects a rating less than 1' do
     rating = described_class.new(
       user: user,
@@ -75,6 +80,7 @@ RSpec.describe Rating, type: :model do
     )
     expect(rating).not_to be_valid
   end
+
   it 'does not allow the same user to rate the same article twice' do
     described_class.create!(
       user: user,
@@ -88,6 +94,7 @@ RSpec.describe Rating, type: :model do
     )
     expect(duplicate_rating).not_to be_valid
   end
+
   it 'calculates the average rating for a news article' do
     described_class.create!(
       user: user,

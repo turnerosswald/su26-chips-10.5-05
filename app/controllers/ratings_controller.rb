@@ -1,5 +1,7 @@
+# frozen_string_literal: true
+
 class RatingsController < ApplicationController
-      before_action :require_login!
+  before_action :require_login!
   def create
     representative = Representative.find(params[:representative_id])
     news_item = representative.news_items.find(params[:news_item_id])
