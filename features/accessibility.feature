@@ -41,10 +41,19 @@ Scenario: Checking county representative results
     Then I should see "Rick Larsen"
     And the page should be axe clean
 
-## CS169: Add the third page here.
-# @a11y
-# Scenario: ...
+@a11y
+Scenario: The Bills Search Page
+    When I visit the bills search page for congress "119" and type "hr"
+    Then the page should be axe clean
 
-## CS169: Add the fourth page here.
-# @a11y
-# Scenario: ...
+@a11y
+Scenario: A Bill's Detail Page
+    When I visit the bills search page for congress "119" and type "hr"
+    And I click the save button for the first bill
+    Then the page should be axe clean
+
+@a11y
+Scenario: A Representative's News Items Page
+    Given Representative "Jane Doe" exists
+    When I visit Jane Doe's news items page
+    Then the page should be axe clean
