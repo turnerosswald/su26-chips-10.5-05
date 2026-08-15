@@ -50,6 +50,7 @@ ActiveRecord::Schema[7.2].define(version: 2026_08_14_021456) do
     t.integer "representative_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "issue"
     t.index ["representative_id"], name: "index_news_items_on_representative_id"
   end
 

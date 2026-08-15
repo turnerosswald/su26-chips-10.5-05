@@ -6,6 +6,7 @@
 #
 #  id                :integer          not null, primary key
 #  description       :text
+#  issue             :string
 #  link              :string           not null
 #  title             :string           not null
 #  created_at        :datetime         not null
@@ -39,6 +40,38 @@ RSpec.describe NewsItem do
 
     it 'finds a news item for the representative' do
       expect(described_class.find_for(representative.id)).to eq(news_item)
+    end
+  end
+
+  describe '.issues' do
+    let(:expected_issues) { ['Free Speech', 'Immigration', 'Climate Change', 'Gun Control', 'Equal Pay'] }
+
+    it 'returns the required list of issues' do
+      expect(described_class.issues).to include(*expected_issues)
+    end
+  end
+
+  describe 'issue attribute' do
+    let(:representative) do
+      Representative.create!(
+        name: 'Jane Doe',
+        ocdid: 'ocd-456',
+        title: 'Representative'
+      )
+    end
+
+    let(:news_item) do
+      described_class.create!(
+        representative: representative,
+        title: 'Climate Article',
+        link: 'https://example.com/climate',
+        description: 'An article about climate change',
+        issue: 'Climate Change'
+      )
+    end
+
+    it 'stores an issue for a news item' do
+      expect(news_item.reload.issue).to eq('Climate Change')
     end
   end
 end
