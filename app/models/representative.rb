@@ -25,6 +25,8 @@
 #
 class Representative < ApplicationRecord
   has_many :news_items, dependent: :delete_all
+  has_many :bill_sponsorships, dependent: :destroy
+  has_many :bills, through: :bill_sponsorships
 
   # Review the Geocodio docs
   # https://www.geocod.io/docs/#congressional-districts
@@ -81,6 +83,14 @@ class Representative < ApplicationRecord
     return nil if bioguide_id.blank?
 
     "https://www.congress.gov/img/member/#{bioguide_id.downcase}_200.jpg"
+  end
+
+  def any_contact_info?
+    [address, phone, website, contact_form].any?(&:present?)
+  end
+
+  def any_social_info?
+    [twitter, facebook, youtube].any?(&:present?)
   end
 
   def update_from_geocodio(official)

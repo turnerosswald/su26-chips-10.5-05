@@ -10,7 +10,17 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2026_08_15_031314) do
+ActiveRecord::Schema[7.2].define(version: 2026_08_15_042520) do
+  create_table "bill_sponsorships", force: :cascade do |t|
+    t.integer "bill_id", null: false
+    t.integer "representative_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["bill_id", "representative_id"], name: "index_bill_sponsorships_on_bill_id_and_representative_id", unique: true
+    t.index ["bill_id"], name: "index_bill_sponsorships_on_bill_id"
+    t.index ["representative_id"], name: "index_bill_sponsorships_on_representative_id"
+  end
+
   create_table "bills", force: :cascade do |t|
     t.string "title"
     t.integer "congress"
@@ -110,6 +120,8 @@ ActiveRecord::Schema[7.2].define(version: 2026_08_15_031314) do
     t.index ["uid", "provider"], name: "index_users_on_uid_provider", unique: true
   end
 
+  add_foreign_key "bill_sponsorships", "bills"
+  add_foreign_key "bill_sponsorships", "representatives"
   add_foreign_key "ratings", "news_items"
   add_foreign_key "ratings", "users"
 end

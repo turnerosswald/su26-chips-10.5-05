@@ -1,4 +1,28 @@
 %h1 Bills
+
+%h2 Saved Bills
+- if @saved_bills.present?
+  %table
+    %tr
+      %th #
+      %th Title
+      %th Congress
+      %th Type
+      %th Chamber
+      %th
+        %span.visually-hidden Actions
+    - @saved_bills.each do |bill|
+      %tr
+        %td #{bill.type} #{bill.number}
+        %td= bill.title
+        %td= bill.congress
+        %td= bill.type
+        %td= bill.original_chamber
+        %td= link_to 'View', bill_path(bill)
+- else
+  %p No bills saved yet.
+
+%h2 Search Bills
 = form_tag bills_path, method: :get do
   = number_field_tag :congress, params[:congress], placeholder: 'Congress', aria: { label: 'Congress' }
   - bill_type_options = options_for_select(@bill_types, params[:bill_type])
