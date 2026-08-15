@@ -17,7 +17,7 @@
         %dt.col-sm-3.text-md-right Average Rating:
         %dt.col-sm-9
           = number_with_precision(@news_item.average_rating, precision: 2)
-          \/ 5
+          / 5
 
         - if current_user
           %dl.row
