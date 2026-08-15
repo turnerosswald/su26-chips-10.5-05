@@ -13,8 +13,9 @@
 #
 # Indexes
 #
-#  index_ratings_on_news_item_id  (news_item_id)
-#  index_ratings_on_user_id       (user_id)
+#  index_ratings_on_news_item_id              (news_item_id)
+#  index_ratings_on_user_id                   (user_id)
+#  index_ratings_on_user_id_and_news_item_id  (user_id,news_item_id) UNIQUE
 #
 # Foreign Keys
 #
