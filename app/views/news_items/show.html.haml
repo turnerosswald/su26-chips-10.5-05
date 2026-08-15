@@ -12,6 +12,24 @@
           %dt.col-sm-3.text-md-right Description:
           %dt.col-sm-9
             = @news_item.description
+
+        %dl.row
+        %dt.col-sm-3.text-md-right Average Rating:
+        %dt.col-sm-9
+          = number_with_precision(@news_item.average_rating, precision: 2)
+          / 5
+
+        - if current_user
+          %dl.row
+            %dt.col-sm-3.text-md-right Rate Article:
+            %dt.col-sm-9
+              = form_with model: Rating.new,
+                          url: representative_news_item_rating_path(@representative, @news_item),
+                          local: true do |f|
+                = f.select :score, options_for_select(1..5), {},
+                          class: 'form-control mb-2'
+                = f.submit 'Submit Rating', class: 'btn btn-primary'
+
         %dl.row
           %dt.col-sm-3.text-md-right Representative:
           %dt.col-sm-9
