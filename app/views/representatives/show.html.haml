@@ -54,14 +54,7 @@
             %p
               %strong Contact Form:
               = link_to contact_form, contact_form, target: '_blank', rel: 'noopener'
-          :ruby
-            contact_info = [
-              @representative&.address,
-              @representative&.phone,
-              @representative&.website,
-              @representative&.contact_form
-            ]
-          - if contact_info.all?(&:blank?)
+          - unless @representative&.any_contact_info?
             %p.text-muted No contact information available.
 
       .card.shadow-sm.mt-4
@@ -83,14 +76,18 @@
             %p
               %strong YouTube:
               = link_to @representative.youtube, youtube_url, target: '_blank', rel: 'noopener'
-          :ruby
-            social_info = [
-              @representative&.twitter,
-              @representative&.facebook,
-              @representative&.youtube
-            ]
-          - if social_info.all?(&:blank?)
+          - unless @representative&.any_social_info?
             %p.text-muted No social media accounts available.
+
+      .card.shadow-sm.mt-4
+        .card-header
+          %h2.mb-0 Bills Sponsored
+        .card-body
+          - if @representative&.bills.present?
+            - @representative.bills.each do |bill|
+              %p= link_to "#{bill.title} (#{bill.type} #{bill.number})", bill_path(bill)
+          - else
+            %p.text-muted No bills sponsored yet.
 
       - if @representative&.bioguide_id.present?
         .text-muted.mt-3.small
